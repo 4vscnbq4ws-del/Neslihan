@@ -46,11 +46,8 @@ body{
   to{opacity:1;transform:none}
 }
 h1{font-size:30px;margin-bottom:18px}
-p{
-  font-size:18px;
-  line-height:1.55;
-  margin-bottom:18px;
-}
+p{font-size:18px;line-height:1.55;margin-bottom:18px}
+
 button{
   margin-top:10px;
   background:linear-gradient(135deg,#ff4d6d,#ff758f);
@@ -60,20 +57,37 @@ button{
   font-size:18px;
   border-radius:999px;
 }
-.surprise{
-  margin-top:26px;
-  font-size:18px;
-  line-height:1.6;
-  display:none;
+
+.date{
+  margin-top:18px;
+  font-size:15px;
+  opacity:.9;
+  font-style:italic;
 }
-.heart{
+
+#effects{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.heart,.confetti{
   position:absolute;
-  font-size:20px;
-  animation:fly 3.5s linear forwards;
+  bottom:-20px;
+  animation:fly 4s linear forwards;
 }
+
+.heart{font-size:26px}
+.confetti{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+}
+
 @keyframes fly{
-  from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-700px);opacity:0}
+  0%{transform:translateY(0) rotate(0);opacity:1}
+  100%{transform:translateY(-120vh) rotate(360deg);opacity:0}
 }
 </style>
 </head>
@@ -83,108 +97,91 @@ button{
 <div class="card">
   <h1 id="title"></h1>
   <div id="message"></div>
+
+  <div class="date" id="together"></div>
+
   <button onclick="love()">Seni Seviyorum ❤️</button>
-  <div class="surprise" id="surprise"></div>
 </div>
+
+<div id="effects"></div>
+
+<audio id="loveSound" preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c1c6c9a5a.mp3?filename=soft-pop-11095.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
+/* ---- TARİH ---- */
+const startDate=new Date(2026,0,19);
+const today=new Date();
+const diffDays=Math.floor((today-startDate)/(1000*60*60*24));
+document.getElementById("together").innerHTML=
+`19.01.2026 ❤️<br>Tanışalı <b>${diffDays}</b> gün oldu`;
+
+/* ---- MESAJ ---- */
 const morning=[
-`Günaydın manyak güzelim 😌❤️  
-Yeni bir güne yine seni düşünerek başlıyorum.  
-Belki aynı yerde değiliz ama kalbimde her sabah en yakında sen varsın.  
-Bugün ne yaparsan yap, bil ki bir yerde seni delicesine seven biri var.`,
-
-`Günaydın benim deli kızım ❤️  
-Uyanır uyanmaz bunu gör istedim.  
-Çünkü gün nasıl geçerse geçsin,  
-benim için günün en güzel yeri sensin.`,
-
-`Yeni bir sabah, yeni bir gün…  
-Ama değişmeyen tek şey var:  
-sana olan hislerim.  
-Bugün de seni sevmekle başlıyorum güne.`
-];
-
-const dayText=
-`Günün ortasında belki yoruldun, belki koşturuyorsun.  
-Ama şunu unutma:  
-senin varlığın bile bana güç veriyor.  
-Mesafeler sadece haritada var,  
-hislerde değil.`;
+`Günaydın manyak güzelim 😌❤️<br><br>
+Yeni bir güne yine seni düşünerek başlıyorum.
+Mesafeler var ama kalbimde her zaman yanımdasın.`];
 
 const night=[
-`İyi geceler Neslihan 🌙  
-Bugün de bitti ama seni düşünmek hiç bitmiyor.  
-Gözlerini kapattığında huzurlu hissetmeni istiyorum.  
-Ben kalbimin en sessiz yerinde seni bekliyorum.`,
-
-`Gece olunca her şey biraz daha sakin oluyor.  
-İşte o sessizlikte aklıma hep sen geliyorsun.  
-Tatlı rüyalar güzel kalpli Neslihan.  
-Umarım rüyalarında bile gülümsersin.`,
-
-`Bugünün en güzel anı,  
-sana iyi geceler diyebilmekti.  
-Yarın yine buradayım. 🌙`
-];
-
-const surprises=[
-`Şunu bilmeni istiyorum:  
-Seni sevmek benim için bir alışkanlık değil,  
-her gün yeniden seçtiğim bir şey.  
-Mesafe var ama vazgeçmek yok.  
-İyi ki varsın ❤️`,
-
-`Belki her an yanında değilim  
-ama kalbim hep seninle.  
-Güldüğünde, yorulduğunda,  
-hiçbir şey yapmadan durduğunda bile…  
-ben seni seviyorum.`,
-
-`Hayat bazen karışık, bazen yorucu.  
-Ama senin varlığın her şeyi daha anlamlı yapıyor.  
-Bunu bil ve unutma:  
-yalnız değilsin. 🤍`
-];
+`İyi geceler Neslihan 🌙<br><br>
+Bugün de bitti ama seni sevmek bitmedi.
+Tatlı rüyalar güzel kalpli kız.`];
 
 const uk=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/London"}));
-const hour=uk.getHours();
+const h=uk.getHours();
 
-if(hour>=19||hour<6)document.body.classList.add("night");
+if(h>=19||h<6)document.body.classList.add("night");
 
-if(hour>=5&&hour<12){
+if(h>=5&&h<12){
   title.innerText="Günaydın ❤️";
-  message.innerHTML="<p>"+morning[Math.floor(Math.random()*morning.length)].replaceAll("\n","</p><p>")+"</p>";
-}else if(hour>=19||hour<5){
-  title.innerText="İyi Geceler 🌙";
-  message.innerHTML="<p>"+night[Math.floor(Math.random()*night.length)].replaceAll("\n","</p><p>")+"</p>";
+  message.innerHTML="<p>"+morning[0]+"</p>";
 }else{
-  title.innerText="Sana Küçük Bir Not 💌";
-  message.innerHTML="<p>"+dayText.replaceAll("\n","</p><p>")+"</p>";
+  title.innerText="İyi Geceler 🌙";
+  message.innerHTML="<p>"+night[0]+"</p>";
 }
 
-for(let i=0;i<10;i++)setTimeout(createHeart,i*180);
+/* ---- İLK AÇILIŞTA PATLA ---- */
+setTimeout(love,800);
+});
 
-window.love=function(){
-  const s=document.getElementById("surprise");
-  s.innerHTML=surprises[Math.floor(Math.random()*surprises.length)].replaceAll("\n","<br><br>");
-  s.style.display="block";
-  for(let i=0;i<22;i++)createHeart();
+/* ---- EFEKTLER ---- */
+function love(){
+  playSound();
+  for(let i=0;i<25;i++)createHeart();
+  for(let i=0;i<35;i++)createConfetti();
+}
+
+function playSound(){
+  const s=document.getElementById("loveSound");
+  s.currentTime=0;
+  s.play();
 }
 
 function createHeart(){
   const h=document.createElement("div");
   h.className="heart";
-  h.innerText="❤️";
-  h.style.left=Math.random()*window.innerWidth+"px";
-  h.style.bottom="0";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),3500);
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  document.getElementById("effects").appendChild(h);
+  setTimeout(()=>h.remove(),5000);
 }
 
-});
+function createConfetti(){
+  const c=document.createElement("div");
+  c.className="confetti";
+  c.style.left=Math.random()*100+"vw";
+  c.style.background=randomColor();
+  document.getElementById("effects").appendChild(c);
+  setTimeout(()=>c.remove(),5000);
+}
+
+function randomColor(){
+  const colors=["#ff4d6d","#ff758f","#ffd166","#06d6a0","#4cc9f0"];
+  return colors[Math.floor(Math.random()*colors.length)];
+}
 </script>
 
 </body>
