@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Neslihan ❤️</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+:root{
+  --bg1:#ffdde1;
+  --bg2:#ee9ca7;
+  --glass:rgba(255,255,255,.25);
+  --text:#fff;
+}
+body.night{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --glass:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  text-align:center;
+  overflow:hidden;
+}
+.card{
+  backdrop-filter: blur(18px);
+  background:var(--glass);
+  border-radius:28px;
+  padding:40px 32px;
+  max-width:420px;
+  animation:enter 1s ease;
+}
+@keyframes enter{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:none}
+}
+h1{font-size:30px;margin-bottom:18px}
+p{
+  font-size:18px;
+  line-height:1.55;
+  margin-bottom:18px;
+}
+button{
+  margin-top:10px;
+  background:linear-gradient(135deg,#ff4d6d,#ff758f);
+  border:none;
+  color:#fff;
+  padding:16px 34px;
+  font-size:18px;
+  border-radius:999px;
+}
+.surprise{
+  margin-top:26px;
+  font-size:18px;
+  line-height:1.6;
+  display:none;
+}
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation:fly 3.5s linear forwards;
+}
+@keyframes fly{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-700px);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 id="title"></h1>
+  <div id="message"></div>
+  <button onclick="love()">Seni Seviyorum ❤️</button>
+  <div class="surprise" id="surprise"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+const morning=[
+`Günaydın manyak güzelim 😌❤️  
+Yeni bir güne yine seni düşünerek başlıyorum.  
+Belki aynı yerde değiliz ama kalbimde her sabah en yakında sen varsın.  
+Bugün ne yaparsan yap, bil ki bir yerde seni delicesine seven biri var.`,
+
+`Günaydın benim deli kızım ❤️  
+Uyanır uyanmaz bunu gör istedim.  
+Çünkü gün nasıl geçerse geçsin,  
+benim için günün en güzel yeri sensin.`,
+
+`Yeni bir sabah, yeni bir gün…  
+Ama değişmeyen tek şey var:  
+sana olan hislerim.  
+Bugün de seni sevmekle başlıyorum güne.`
+];
+
+const dayText=
+`Günün ortasında belki yoruldun, belki koşturuyorsun.  
+Ama şunu unutma:  
+senin varlığın bile bana güç veriyor.  
+Mesafeler sadece haritada var,  
+hislerde değil.`;
+
+const night=[
+`İyi geceler Neslihan 🌙  
+Bugün de bitti ama seni düşünmek hiç bitmiyor.  
+Gözlerini kapattığında huzurlu hissetmeni istiyorum.  
+Ben kalbimin en sessiz yerinde seni bekliyorum.`,
+
+`Gece olunca her şey biraz daha sakin oluyor.  
+İşte o sessizlikte aklıma hep sen geliyorsun.  
+Tatlı rüyalar güzel kalpli Neslihan.  
+Umarım rüyalarında bile gülümsersin.`,
+
+`Bugünün en güzel anı,  
+sana iyi geceler diyebilmekti.  
+Yarın yine buradayım. 🌙`
+];
+
+const surprises=[
+`Şunu bilmeni istiyorum:  
+Seni sevmek benim için bir alışkanlık değil,  
+her gün yeniden seçtiğim bir şey.  
+Mesafe var ama vazgeçmek yok.  
+İyi ki varsın ❤️`,
+
+`Belki her an yanında değilim  
+ama kalbim hep seninle.  
+Güldüğünde, yorulduğunda,  
+hiçbir şey yapmadan durduğunda bile…  
+ben seni seviyorum.`,
+
+`Hayat bazen karışık, bazen yorucu.  
+Ama senin varlığın her şeyi daha anlamlı yapıyor.  
+Bunu bil ve unutma:  
+yalnız değilsin. 🤍`
+];
+
+const uk=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/London"}));
+const hour=uk.getHours();
+
+if(hour>=19||hour<6)document.body.classList.add("night");
+
+if(hour>=5&&hour<12){
+  title.innerText="Günaydın ❤️";
+  message.innerHTML="<p>"+morning[Math.floor(Math.random()*morning.length)].replaceAll("\n","</p><p>")+"</p>";
+}else if(hour>=19||hour<5){
+  title.innerText="İyi Geceler 🌙";
+  message.innerHTML="<p>"+night[Math.floor(Math.random()*night.length)].replaceAll("\n","</p><p>")+"</p>";
+}else{
+  title.innerText="Sana Küçük Bir Not 💌";
+  message.innerHTML="<p>"+dayText.replaceAll("\n","</p><p>")+"</p>";
+}
+
+for(let i=0;i<10;i++)setTimeout(createHeart,i*180);
+
+window.love=function(){
+  const s=document.getElementById("surprise");
+  s.innerHTML=surprises[Math.floor(Math.random()*surprises.length)].replaceAll("\n","<br><br>");
+  s.style.display="block";
+  for(let i=0;i<22;i++)createHeart();
+}
+
+function createHeart(){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤️";
+  h.style.left=Math.random()*window.innerWidth+"px";
+  h.style.bottom="0";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),3500);
+}
+
+});
+</script>
+
+</body>
+</html>
