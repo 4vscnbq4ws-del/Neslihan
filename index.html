@@ -7,143 +7,178 @@
 
 <style>
 body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    color:#fff;
-    overflow:hidden;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow:hidden;
+  transition:background 1s,color 1s;
 }
 
-/* YILDIZLAR */
+/* GÜNDÜZ */
+body.day{
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#333;
+}
+
+/* GECE */
+body.night{
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#fff;
+}
+
+/* YOĞUN YILDIZLAR */
 .stars{
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(2px 2px at 20% 30%,#fff,transparent),
-      radial-gradient(1.5px 1.5px at 80% 40%,#fff,transparent),
-      radial-gradient(1px 1px at 60% 70%,#fff,transparent),
-      radial-gradient(2px 2px at 30% 80%,#fff,transparent),
-      radial-gradient(1.5px 1.5px at 70% 20%,#fff,transparent);
-    animation: twinkle 3s infinite alternate;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(1.5px 1.5px at 10% 20%,#fff,transparent),
+    radial-gradient(2px 2px at 30% 40%,#fff,transparent),
+    radial-gradient(1px 1px at 70% 10%,#fff,transparent),
+    radial-gradient(2px 2px at 80% 60%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 50% 80%,#fff,transparent),
+    radial-gradient(2px 2px at 90% 30%,#fff,transparent),
+    radial-gradient(1px 1px at 20% 70%,#fff,transparent);
+  animation:twinkle 2s infinite alternate;
 }
 @keyframes twinkle{
-    from{opacity:.4}
-    to{opacity:1}
+  from{opacity:.4}
+  to{opacity:1}
 }
 
 .card{
-    position:relative;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(12px);
-    border-radius:24px;
-    padding:32px 24px;
-    max-width:340px;
-    text-align:center;
-    box-shadow:0 20px 40px rgba(0,0,0,.3);
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(14px);
+  border-radius:26px;
+  padding:28px 22px;
+  max-width:340px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,.3);
 }
 
-h1{
-    margin:0 0 8px;
-    font-size:30px;
-}
-p{
-    opacity:.9;
-    line-height:1.5;
-}
+h1{margin:0 0 12px;font-size:30px}
+p{line-height:1.6}
 
 .date{
-    margin-top:12px;
-    opacity:.8;
-    font-size:14px;
+  margin-top:14px;
+  font-size:14px;
+  opacity:.8;
 }
 
 .btn{
-    margin-top:20px;
-    display:inline-block;
-    padding:14px 28px;
-    background:linear-gradient(135deg,#ff416c,#ff4b2b);
-    border-radius:999px;
-    color:#fff;
-    font-weight:600;
-    text-decoration:none;
-    animation:pulse 1.8s infinite;
-}
-@keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(255,75,75,.6)}
-    70%{box-shadow:0 0 0 20px rgba(255,75,75,0)}
-    100%{box-shadow:0 0 0 0 rgba(255,75,75,0)}
+  margin-top:22px;
+  display:inline-block;
+  padding:14px 30px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ff416c,#ff4b2b);
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  animation:pulse 1.8s infinite;
 }
 
-/* KALP KONFETİ */
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,75,75,.6)}
+  70%{box-shadow:0 0 0 22px rgba(255,75,75,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,75,75,0)}
+}
+
+/* KALPLER */
 .heart{
-    position:fixed;
-    color:#ff4b5c;
-    font-size:20px;
-    animation:fall linear forwards;
+  position:fixed;
+  font-size:22px;
+  animation:fall linear forwards;
 }
 @keyframes fall{
-    to{
-        transform:translateY(110vh) rotate(360deg);
-        opacity:0;
-    }
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="stars"></div>
+<div id="stars" class="stars"></div>
 
 <div class="card">
-    <h1 id="title">İyi Geceler 🌙</h1>
-    <p id="message"></p>
-    <div class="date" id="counter"></div>
+  <h1 id="title"></h1>
+  <p id="message"></p>
+  <div class="date" id="counter"></div>
 
-    <a class="btn" href="https://wa.me/905453493489?text=Seni%20seviyorum%20❤️">
-        Bana tıkla ❤️
-    </a>
+  <a id="btn" class="btn"
+     href="https://wa.me/905453493489?text=Seni%20seviyorum%20❤️">
+     Bana tıkla ❤️
+  </a>
 </div>
 
-<audio id="sound" autoplay>
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-level-completed-2059.mp3" type="audio/mpeg">
+<!-- GERÇEK KALP ATIŞ SESİ -->
+<audio id="heartbeat" preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8d4c3c1b6b.mp3?filename=heartbeat-123060.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// GÜNLÜK MESAJLAR
-const messages = [
- "Bugün de bitti ama seni sevmek bitmedi.",
- "Gülüşün günümü aydınlatıyor.",
- "Kalbim her gün sana biraz daha alışıyor.",
- "İyi ki varsın güzel kalpli kız.",
- "Bu gece de aklımdasın."
-];
+const hour = new Date().getHours();
+const isNight = hour >= 18 || hour < 6;
+document.body.className = isNight ? "night" : "day";
+document.getElementById("stars").style.display = isNight ? "block" : "none";
 
-const msg = messages[new Date().getDate() % messages.length];
-document.getElementById("message").innerText = msg + "\nTatlı rüyalar Neslihan 🌙";
+/* BAŞLIK */
+document.getElementById("title").innerText =
+  hour < 6 ? "İyi Geceler 🌙" :
+  hour < 12 ? "Günaydın ☀️" :
+  hour < 18 ? "İyi Günler 💛" :
+  "İyi Geceler 🌙";
 
-// TANISMA GÜNÜ
-const start = new Date("2026-01-19");
-const today = new Date();
-const diff = Math.floor((today - start) / (1000*60*60*24));
-document.getElementById("counter").innerText =
-"19.01.2026 ❤️\nTanışalı " + diff + " gün oldu";
-
-// OTOMATİK KALP KONFETİ
-function heartBoom(){
-    for(let i=0;i<30;i++){
-        const h = document.createElement("div");
-        h.className="heart";
-        h.innerText="❤️";
-        h.style.left=Math.random()*100+"vw";
-        h.style.animationDuration=2+Math.random()*2+"s";
-        document.body.appendChild(h);
-        setTimeout(()=>h.remove(),4000);
-    }
+/* SAATE GÖRE MESAJ */
+let message="";
+if(hour < 6){
+  message="Bu gece de aklımdasın.\nTatlı rüyalar Neslihan 🌙";
+}else if(hour < 12){
+  message="Güne seninle başlamak güzel.\nGünaydın Neslihan ☀️";
+}else if(hour < 18){
+  message="Bugün de kalbim seninle.\nGülüşün yeter 💕";
+}else{
+  message="Bugün de bitti ama seni sevmek bitmedi.\nTatlı rüyalar güzel kalpli kız 🌙";
 }
-heartBoom();
+document.getElementById("message").innerText=message;
+
+/* TANISMA GÜNÜ */
+const start=new Date("2026-01-19");
+const today=new Date();
+const days=Math.max(0,Math.floor((today-start)/(1000*60*60*24)));
+document.getElementById("counter").innerText=
+"19.01.2026 ❤️\nTanışalı "+days+" gün oldu";
+
+/* KALP PATLAMASI */
+function hearts(){
+  for(let i=0;i<30;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.top="-20px";
+    h.style.animationDuration=2+Math.random()*2+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  }
+}
+
+/* SES */
+const beat=document.getElementById("heartbeat");
+window.addEventListener("load",()=>{
+  beat.volume=0.4;
+  beat.play().catch(()=>{});
+  hearts();
+});
+
+document.getElementById("btn").addEventListener("click",()=>{
+  beat.currentTime=0;
+  beat.play();
+});
 </script>
 </body>
 </html>
