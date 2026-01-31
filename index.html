@@ -2,15 +2,16 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neslihan</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manyak karım</title>
 
 <style>
 :root{
   --pink:#ff4d6d;
-  --bg-night:#0b1d26;
-  --bg-day:#f6f7fb;
-  --glass:rgba(255,255,255,.12);
+  --green:#25D366;
+  --bg1:#f4f6fb;
+  --bg2:#0b1d26;
+  --glass:rgba(255,255,255,.18);
 }
 *{box-sizing:border-box}
 body{
@@ -20,63 +21,57 @@ body{
   align-items:center;
   justify-content:center;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  overflow:hidden;
+  background:var(--bg1);
   transition:background 1s,color 1s;
+  overflow:hidden;
 }
 body.night{
-  background:radial-gradient(circle at top,var(--bg-night),#020b11);
+  background:radial-gradient(circle at top,var(--bg2),#020b11);
   color:#fff;
 }
-body.day{
-  background:linear-gradient(135deg,var(--bg-day),#e9ecf3);
-  color:#222;
-}
 
-/* YILDIZ KANVASI */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:0;
-}
+/* STARS */
+canvas{position:fixed;inset:0;z-index:0}
 
-/* KART */
+/* CARD */
 .card{
   position:relative;
   z-index:2;
   width:90%;
-  max-width:380px;
-  padding:34px 28px;
-  border-radius:28px;
+  max-width:390px;
+  padding:36px 30px 34px;
+  border-radius:30px;
   background:var(--glass);
-  backdrop-filter:blur(18px);
-  box-shadow:0 30px 60px rgba(0,0,0,.35);
-  animation:cardIn .8s ease;
+  backdrop-filter:blur(22px);
+  box-shadow:
+    0 30px 60px rgba(0,0,0,.35),
+    inset 0 0 0 1px rgba(255,255,255,.12);
+  animation:in .9s cubic-bezier(.2,.8,.2,1);
 }
-@keyframes cardIn{
-  from{opacity:0;transform:translateY(30px) scale(.97)}
+@keyframes in{
+  from{opacity:0;transform:translateY(40px) scale(.96)}
   to{opacity:1;transform:none}
 }
 
 h1{
   margin:0 0 14px;
   font-size:30px;
-  letter-spacing:.3px;
+  letter-spacing:.2px;
 }
 p{
   margin:0;
-  line-height:1.6;
   font-size:17px;
+  line-height:1.6;
 }
-
-.info{
+.meta{
   margin-top:18px;
   font-size:14px;
-  opacity:.8;
+  opacity:.75;
 }
 
-/* BUTONLAR */
-.main-btn{
-  margin-top:22px;
+/* BUTTON */
+.main{
+  margin-top:24px;
   width:100%;
   padding:16px;
   border:none;
@@ -84,38 +79,41 @@ p{
   background:linear-gradient(135deg,var(--pink),#ff758f);
   color:#fff;
   font-size:18px;
+  letter-spacing:.3px;
+  box-shadow:0 12px 30px rgba(255,77,109,.45);
 }
+.main:active{transform:scale(.97)}
 
+/* WHATSAPP */
 .wa{
   position:fixed;
   bottom:22px;
-  right:18px;
+  right:22px;
   padding:14px 18px;
   border-radius:999px;
-  background:linear-gradient(135deg,#25D366,#1ebe5d);
+  background:linear-gradient(135deg,var(--green),#1ebe5d);
   color:#fff;
   text-decoration:none;
   font-size:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-  animation:pulse 1.6s infinite;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+  animation:pulse 1.8s infinite;
   z-index:3;
 }
 @keyframes pulse{
-  0%{transform:scale(1)}
+  0%,100%{transform:scale(1)}
   50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
 }
 
-/* KALPLER */
+/* HEARTS */
 .heart{
   position:fixed;
-  font-size:20px;
-  animation:float 4s linear forwards;
+  font-size:22px;
+  animation:float 5s cubic-bezier(.2,.6,.2,1) forwards;
   pointer-events:none;
 }
 @keyframes float{
-  from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-120vh);opacity:0}
+  from{transform:translateY(0) scale(.8);opacity:1}
+  to{transform:translateY(-120vh) scale(1.4);opacity:0}
 }
 </style>
 </head>
@@ -125,98 +123,96 @@ p{
 
 <div class="card">
   <h1 id="title"></h1>
-  <p id="text"></p>
-  <div class="info" id="days"></div>
-  <button class="main-btn" onclick="love()">Seni Seviyorum ❤️</button>
+  <p id="msg"></p>
+  <div class="meta" id="days"></div>
+  <button class="main" onclick="love()">Seni Seviyorum ❤️</button>
 </div>
 
 <a class="wa"
-   href="https://wa.me/905453493489?text=Seni%20seviyorum%20❤️"
-   target="_blank">
-  Bana tıkla 💚
+ href="https://wa.me/905453493489?text=Seni%20seviyorum%20❤️"
+ target="_blank">
+ Bana tıkla 💚
 </a>
 
 <audio id="beat" preload="auto">
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8d4c3c1b6b.mp3?filename=heartbeat-123060.mp3">
+ <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8d4c3c1b6b.mp3">
 </audio>
 
 <script>
-/* GÜN / GECE */
+/* DAY / NIGHT */
 const h=new Date().getHours();
 const night=h>=19||h<6;
-document.body.className=night?"night":"day";
+if(night)document.body.classList.add("night");
 
-/* BAŞLIK + MESAJ */
-const title=document.getElementById("title");
-const text=document.getElementById("text");
+/* MESSAGES */
+const blocks={
+ morning:[
+  "Güne seninle başlamak içimi ısıtıyor.",
+  "Bugün de aklımın en güzel yerindesin."
+ ],
+ day:[
+  "Bugün de aklımın bir köşesinde sen varsın.",
+  "Günün içinde adını düşünmeden geçmiyorum."
+ ],
+ night:[
+  "Bugün bitti ama seni sevmek bitmedi.",
+  "Bu gece de kalbim sessizce seni düşünüyor."
+ ]
+};
 
-if(h<6){
-  title.innerText="İyi Geceler 🌙";
-  text.innerText="Bu saatte kalbim sessizce seni düşünüyor.";
-}else if(h<12){
-  title.innerText="Günaydın ☀️";
-  text.innerText="Güne seninle başlamak güzel bir alışkanlık.";
-}else if(h<18){
-  title.innerText="Merhaba 💛";
-  text.innerText="Bugün de aklımın bir köşesinde sen varsın.";
-}else{
-  title.innerText="İyi Geceler 🌙";
-  text.innerText="Bugün de bitti ama seni sevmek bitmedi.";
-}
+let title,msg;
+if(h<6){title="İyi Geceler 🌙";msg=blocks.night}
+else if(h<12){title="Günaydın ☀️";msg=blocks.morning}
+else if(h<18){title="Merhaba 💛";msg=blocks.day}
+else{title="İyi Geceler 🌙";msg=blocks.night}
 
-/* GÜN SAYISI */
+document.getElementById("title").innerText=title;
+document.getElementById("msg").innerText=
+ msg[Math.floor(Math.random()*msg.length)];
+
+/* DAYS */
 const start=new Date("2026-01-19");
-const diff=Math.max(0,Math.floor((Date.now()-start)/(1000*60*60*24)));
+const d=Math.floor((Date.now()-start)/(86400000));
 document.getElementById("days").innerText=
-"19.01.2026 • Tanışalı "+diff+" gün";
+ "19.01.2026 • Tanışalı "+Math.max(d,0)+" gün";
 
-/* KALP ATIŞI */
+/* LOVE */
 const beat=document.getElementById("beat");
 function love(){
-  beat.currentTime=0;
-  beat.volume=.6;
-  beat.play();
-  for(let i=0;i<20;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerText="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.bottom="-20px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4000);
-  }
+ beat.currentTime=0; beat.volume=.6; beat.play();
+ for(let i=0;i<24;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.bottom="-30px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
+ }
 }
 
-/* YILDIZLAR (KANVAS) */
-const c=document.getElementById("stars"),ctx=c.getContext("2d");
-let w,hgt;
-function resize(){
-  w=c.width=window.innerWidth;
-  hgt=c.height=window.innerHeight;
-}
-resize();window.onresize=resize;
-
-const stars=Array.from({length:120},()=>({
-  x:Math.random()*w,
-  y:Math.random()*hgt,
-  r:Math.random()*1.5+0.5,
-  s:Math.random()*0.3+0.1
+/* STARS */
+const c=document.getElementById("stars"),x=c.getContext("2d");
+let w,hg;
+function r(){w=c.width=innerWidth;hg=c.height=innerHeight}
+r();onresize=r;
+const s=[...Array(140)].map(()=>({
+ x:Math.random()*w,y:Math.random()*hg,r:Math.random()*1.4+.4,s:Math.random()*.35+.1
 }));
-
-function draw(){
-  ctx.clearRect(0,0,w,hgt);
-  ctx.fillStyle="white";
-  stars.forEach(s=>{
-    ctx.globalAlpha=Math.random();
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fill();
-    s.y+=s.s;
-    if(s.y>hgt)s.y=0;
-  });
-  requestAnimationFrame(draw);
-}
-if(night) draw();
+(function a(){
+ if(!night)return;
+ x.clearRect(0,0,w,hg);
+ x.fillStyle="#fff";
+ s.forEach(o=>{
+  x.globalAlpha=Math.random();
+  x.beginPath();
+  x.arc(o.x,o.y,o.r,0,7);
+  x.fill();
+  o.y+=o.s;
+  if(o.y>hg)o.y=0;
+ });
+ requestAnimationFrame(a);
+})();
 </script>
 </body>
 </html>
